@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-client-streaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-client-streaming
+  template:
+    metadata:
+      labels:
+        app: grpc-client-streaming
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: grpc-client-streaming
+        image: ghcr.io/ivankovnatsky/images-public/grpc-client-streaming:latest
+        command: ["/client"]
+        args:
+          - "-duration=5"
+          - "-insecure=true"
+          - "-server=grpc-server-streaming.default.svc.cluster.local:8080"
