@@ -1,17 +1,14 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: grpc-client-streaming
+  name: grpc-client-streaming-job
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: grpc-client-streaming
   template:
     metadata:
       labels:
         app: grpc-client-streaming
-        sidecar.istio.io/inject: "true"
+      annotations:
+        sidecar.istio.io/inject: "false"
     spec:
       containers:
       - name: grpc-client-streaming
@@ -21,3 +18,4 @@ spec:
           - "-duration=5"
           - "-insecure=true"
           - "-server=grpc-server-streaming.default.svc.cluster.local:8080"
+      restartPolicy: Never
